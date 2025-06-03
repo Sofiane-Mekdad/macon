@@ -1,0 +1,11 @@
+<article class="card">
+    <img src="{{lien ? lien : 'https://placehold.co/200x200'}}" alt="">
+    <h2>{{nom}}</h2>
+    <p>{{description}}</p>
+    <div style="width:100%">
+    {% if hide is not defined %}
+    <a href="{{path('app_service_show_one', {id: id})}}" class="button-card">En voir plus</a>
+    {% endif %}
+    
+    </div>
+</article>

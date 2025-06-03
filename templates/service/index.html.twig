@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ServiceController!{% endblock %}
+
+{% block body %}
+<h1>Nos services</h1>
+<div class="flex-index">
+    {% for service in services %}
+        {% include "component/card.html.twig" with {'nom':service.nom, 'lien':service.image, 'description':service.description, 'id':service.id } %}
+    {% endfor %}
+</div>
+{% endblock %}
