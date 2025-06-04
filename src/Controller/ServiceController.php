@@ -11,6 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 final class ServiceController extends AbstractController
 {
     #[Route('/', name: 'app_service')]
@@ -20,29 +25,27 @@ final class ServiceController extends AbstractController
             'services' => $sr->findAll(),
         ]);
     }
-    #[Route('/service', name: 'app_service_add_one', methods: ["POST"])]
-    public function add_one(ManagerRegistry $managerRegistry, Request $request): Response
-    {
-        $manager = $managerRegistry->getManager();
-        $r = $request;
-        $s = new Service();
-        $s->setNom($r->get("nom"));
-        $s->setDescription($r->get("description"));
-        $s->setPrix($r->get("prix"));
-        $s->setImage("");
-        $manager->persist($s);
-        $manager->flush();
-        return $this->render('service/show.html.twig', [
-            'service' => $s,
-        ]);
-    }
+
 
     #[Route('/service/add', name: 'app_service_add_one_form')]
     public function formAddOne(): Response
     {
+        $s = new Service();
+        $s->setNom("nom");
+        $s->setDescription("description");
+        $s->setPrix(0);
+        $s->setImage("");
 
+        $form = $this->createFormBuilder($s)
+            ->add("nom", TextType::class)
+            ->add("description", TextareaType::class)
+            ->add("prix", IntegerType::class)
+            ->add('save', SubmitType::class, ['label' => 'Ajouter'])
+            ->getForm();
 
-        return $this->render('service/add.html.twig');
+        return $this->render('service/add.html.twig',[
+            'form'=> $form
+        ]);
     }
 
     #[Route('/service/{id}', name: 'app_service_show_one', methods: ["GET"])]
