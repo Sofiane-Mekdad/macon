@@ -3,5 +3,13 @@
     <img src="https://placehold.co/200x50" alt="">
     <a href="{{path('app_service')}}">Accueil</a>
     <a href="">Nous contacter</a>
+    {% if is_granted("ROLE_USER")%}
+        <a href="/logout">se déconnecter</a>
+        <a href="{{path('app_service_add_one_form')}}">ajouter service</a>
+    {% else %}
+        <a href="/app_login">se connecter</a>
+        <a href="{{path('app_signup')}}">créer un compte</a>
+    {% endif %}
+    
 </nav>
 </header>
