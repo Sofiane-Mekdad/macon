@@ -5,6 +5,7 @@
     <div style="width:100%">
     {% if hide is not defined %}
     <a href="{{path('app_service_show_one', {id: id})}}" class="button-card">En voir plus</a>
+    <button type="button" onclick="delete_service(this)" data-link="{{path('app_delete_one', {id : id})}}">effacer</button>
     {% endif %}
     
     </div>

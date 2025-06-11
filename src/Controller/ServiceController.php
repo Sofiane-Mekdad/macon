@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 final class ServiceController extends AbstractController
 {
@@ -28,8 +29,10 @@ final class ServiceController extends AbstractController
 
 
     #[Route('/service/add', name: 'app_service_add_one_form')]
-    public function formAddOne(): Response
+    public function formAddOne(Request $request,ManagerRegistry $em): Response
     {
+
+        $em = $em->getManager();
         $s = new Service();
         $s->setNom("nom");
         $s->setDescription("description");
@@ -42,6 +45,13 @@ final class ServiceController extends AbstractController
             ->add("prix", IntegerType::class)
             ->add('save', SubmitType::class, ['label' => 'Ajouter'])
             ->getForm();
+
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em->persist($s);
+                $em->flush();
+                return $this->redirectToRoute('app_service');
+            }
 
         return $this->render('service/add.html.twig',[
             'form'=> $form
@@ -56,6 +66,39 @@ final class ServiceController extends AbstractController
         ]);
     }
 
+    #[Route('/service/{id}', name: 'app_delete_one', methods: ["DELETE"])]
+    public function delete_one(Service $service, ManagerRegistry  $mr): Response
+    {
+        $em = $mr->getManager();
+        $em->remove($service);
+        $em->flush();
 
+        return new Response('success');
+    }
 
+    #[Route('/service/edit/{id}', name: 'app_edit_service')]
+    public function edit_one(Request $request, Service $service, ManagerRegistry  $mr): Response
+    {
+        $em = $mr->getManager();
+        $form = $this->createFormBuilder($service)
+            ->add("nom", TextType::class)
+            ->add("description", TextareaType::class)
+            ->add("prix", IntegerType::class)
+            ->add('save', SubmitType::class, ['label' => 'Ajouter'])
+            ->getForm();
+
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em->persist($service);
+                $em->flush();
+                return $this->redirectToRoute('app_service');
+            }  
+
+        return $this->render('service/add.html.twig',[
+            'form'=> $form
+        ]);
+
+    }
+
+    
 }

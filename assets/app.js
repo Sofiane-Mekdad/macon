@@ -7,15 +7,3 @@ import './bootstrap.js';
  */
 import './styles/app.css';
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
-
-function openCard(e)
-{
-    console.log(e.target)
-    e.target.parentNode.querySelector("p").classList.toggle("open")
-}
-
-document.querySelectorAll(".button-card").forEach((v)=>
-{
-    addEventListener("click", openCard)
-})

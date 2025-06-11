@@ -3,10 +3,29 @@
 {% block title %}Hello ServiceController!{% endblock %}
 
 {% block body %}
+
+
 <h1>Nos services</h1>
 <div class="flex-index">
     {% for service in services %}
         {% include "component/card.html.twig" with {'nom':service.nom, 'lien':service.image, 'description':service.description, 'id':service.id } %}
     {% endfor %}
 </div>
+<script>
+function delete_service(e)
+{
+    let link = e.getAttribute("data-link")
+
+    fetch(link, {method: "DELETE"})
+
+    .then(res =>
+    {
+        if(res.status == 200)
+        {
+            e.parentNode.parentNode.remove()
+        }
+    }
+    )
+}
+</script>
 {% endblock %}

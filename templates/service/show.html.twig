@@ -8,5 +8,7 @@
 <div class="show-one">
     {% set hide = true %}
     {% include "component/card.html.twig" with {'nom':service.nom, 'lien':service.image, 'description':service.description, 'id':service.id } %}
+    {% set id = service.id %}
+    <a href="{{path('app_edit_service', {id:id})}}">edit</a>
 </div>
 {% endblock %}
